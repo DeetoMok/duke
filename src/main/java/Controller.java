@@ -1,4 +1,3 @@
-import Exceptions.DukeException;
 import Tasks.Deadline;
 import Tasks.Events;
 import Tasks.TaskList;
@@ -10,12 +9,10 @@ public class Controller {
     Storage storage = new Storage();
     Parser parser = new Parser();
 
-
     /**
-     * Method that reads the user's input to decide what the user wants to do with it.
-     * @param userInput : scanned user input.
-     * @param taskListArrayList : ArrayList that stores all the user's tasks.
-     * @return : returns the updated ArrayList.
+     * Reads the input that is provided by the user, parses it and then acts on the tasklist as commanded.
+     * @param userInput : String of input scanned from the user
+     * @param taskListArrayList : ArrayList holding the Tasks of the user
      */
     public Serializable readInput(String userInput, TaskList taskListArrayList) {
         String command = parser.getCommand(userInput);
@@ -55,45 +52,39 @@ public class Controller {
             try {
                 userInput = userInput.substring(5).trim();
                 if (userInput.equals("")) {
-                    throw new DukeException(Ui.EMPTY_STRING);
+                    throw new EmptyStringException();
                 }
                 ToDo t = new ToDo(userInput);
                 taskListArrayList.addTask(t);
                 return Ui.addTaskMessage(userInput, taskListArrayList, t);
-            } catch (DukeException | StringIndexOutOfBoundsException e) {
+            } catch (EmptyStringException e) {
                 return Ui.EMPTY_STRING;
             }
         case "deadline":
             try {
                 userInput = userInput.substring(9).trim();
                 if (userInput.equals("")) {
-                    throw new DukeException(Ui.EMPTY_STRING);
+                    throw new EmptyStringException();
                 }
                 Deadline d = new Deadline(userInput);
                 taskListArrayList.addTask(d);
                 return Ui.addTaskMessage(userInput, taskListArrayList, d);
 
-            } catch (DukeException | StringIndexOutOfBoundsException e) {
+            } catch (EmptyStringException e) {
                 return Ui.EMPTY_STRING;
             }
         case "event":
             try {
                 userInput = userInput.substring(6).trim();
                 if (userInput.equals("")) {
-                    throw new DukeException(Ui.EMPTY_STRING);
+                    throw new EmptyStringException();
                 }
                 Events e = new Events(userInput);
                 taskListArrayList.addTask(e);
                 return Ui.addTaskMessage(userInput, taskListArrayList, e);
-            } catch (DukeException | StringIndexOutOfBoundsException e) {
+            } catch (EmptyStringException e) {
                 return Ui.EMPTY_STRING;
             }
-        case "clear":
-            taskListArrayList.clearList();
-            return Ui.CLEAR_LIST;
-        case "find":
-            userInput = userInput.substring(5).trim();
-            return taskListArrayList.find(userInput);
         case "help":
             return Ui.HELP;
         case "bye":
